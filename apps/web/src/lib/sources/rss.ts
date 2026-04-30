@@ -1,30 +1,54 @@
-function clean(text:string){
-  return text.replace(/<!\[CDATA\[(.*?)\]\]>/g, "$1");
-}
+export async function fetchAllRSS() {
+  try {
+    // 1. Try combined RSS_FEEDS
+    const combined = process.env.RSS_FEEDS;
 
-export async function fetchRSS(url:string){
-  try{
-    const res = await fetch(url);
-    const xml = await res.text();
+    // 2. Fallback: collect all env variables ending with _RSS or _FEED
+    const envFeeds = Object.entries(process.env)
+      .filter(([key, val]) =>
+        (key.endsWith("_RSS") || key.endsWith("_FEED")) && val
+      )
+      .map(([_, val]) => val as string);
 
-    const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+    const urls = combined
+      ? combined.split(",")
+      : envFeeds;
 
-    return items.slice(0,10).map((item:any)=>{
-      const get = (tag:string)=>{
-        const m = item[1].match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
-        return m ? clean(m[1]) : "";
-      };
+    if (!urls || urls.length === 0) {
+      console.warn("⚠️ No RSS feeds found, using fallback BBC");
+      urls.push("https://feeds.bbci.co.uk/news/rss.xml");
+    }
 
-      return {
-        title: get("title"),
-        link: get("link"),
-        pubDate: get("pubDate"),
-        source: "RSS"
-      };
-    });
+    const results = await Promise.all(
+      urls.map(async (url) => {
+        try {
+          const res = await fetch(url);
+          const text = await res.text();
 
-  }catch(e){
-    console.error("RSS ERROR", e);
+          const items = [...text.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+
+          return items.slice(0, 5).map((item: any) => {
+            const get = (tag: string) => {
+              const match = item[1].match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
+              return match ? match[1].replace(/<!\[CDATA\[|\]\]>/g, "") : "";
+            };
+
+            return {
+              title: get("title"),
+              link: get("link"),
+              pubDate: get("pubDate"),
+              source: "RSS"
+            };
+          });
+        } catch (e) {
+          return [];
+        }
+      })
+    );
+
+    return results.flat();
+  } catch (err) {
+    console.error("RSS ERROR:", err);
     return [];
   }
 }
