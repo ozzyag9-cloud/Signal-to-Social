@@ -6,10 +6,26 @@ export async function GET() {
       const encoder = new TextEncoder();
 
       async function send() {
-        const data = await runPipeline();
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
-        );
+        try {
+          const data = await runPipeline();
+
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
+          );
+
+        } catch (err:any) {
+          console.error("STREAM ERROR:", err);
+
+          // fallback so UI doesn't freeze
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify({
+              news: [],
+              clusters: [],
+              videos: [],
+              error: "pipeline_failed"
+            })}\n\n`)
+          );
+        }
       }
 
       await send();
