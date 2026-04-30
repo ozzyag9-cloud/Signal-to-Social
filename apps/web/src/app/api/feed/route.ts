@@ -1,22 +1,6 @@
-import { getCache } from "@/lib/cache/store";
+import { runPipeline } from "@/lib/agents/pipeline";
 
-export async function GET() {
-  try {
-    const data = getCache();
-
-    console.log("FEED API CALLED:", data);
-
-    return Response.json(
-      data || { news: [], clusters: [], videos: [] }
-    );
-
-  } catch (e:any) {
-    console.error("FEED ERROR:", e);
-    return Response.json({
-      news: [],
-      clusters: [],
-      videos: [],
-      error: "feed_failed"
-    });
-  }
+export async function GET(){
+  const data = await runPipeline();
+  return Response.json(data);
 }
