@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-const FILE = path.join(process.cwd(), "apps/web/data/memory.json");
+// FORCE ROOT PATH (reliable in Codespaces)
+const FILE = path.resolve("apps/web/data/memory.json");
 
 function ensureFile() {
   const dir = path.dirname(FILE);
@@ -28,5 +29,7 @@ export function loadMemory() {
 export function saveMemory(data: any) {
   ensureFile();
   fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
+
   console.log("💾 Memory saved:", data.length);
+  console.log("📂 Path:", FILE);
 }
