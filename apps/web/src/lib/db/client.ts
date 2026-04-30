@@ -2,7 +2,6 @@ export async function saveSignals(data: any[]) {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_ANON_KEY;
 
-  // Prevent undefined issues
   if (!url || !key) {
     console.log("⚠️ Missing Supabase env, skipping DB write");
     return;
