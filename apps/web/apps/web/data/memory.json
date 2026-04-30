@@ -1,262 +1,451 @@
 [
   {
-    "title": "News 35",
+    "title": "News 14",
     "link": "#",
-    "pubDate": "2026-04-30T06:56:22.965Z",
-    "summary": "News 35",
-    "score": 0.2682928464201795,
+    "pubDate": "2026-04-30T07:37:16.382Z",
+    "summary": "News 14",
+    "score": 0.6655967136793571,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 49",
+    "link": "#",
+    "pubDate": "2026-04-30T07:26:16.123Z",
+    "summary": "News 49",
+    "score": 0.6542265523569144,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 31",
+    "link": "#",
+    "pubDate": "2026-04-30T07:17:55.952Z",
+    "summary": "News 31",
+    "score": 0.19005053168808217,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 98",
+    "title": "News 1",
     "link": "#",
-    "pubDate": "2026-04-30T06:56:42.983Z",
-    "summary": "News 98",
-    "score": 0.2969577261187579,
+    "pubDate": "2026-04-30T07:40:36.464Z",
+    "summary": "News 1",
+    "score": 0.22082088151981083,
+    "hits": 4,
+    "trend": "rising"
+  },
+  {
+    "title": "News 44",
+    "link": "#",
+    "pubDate": "2026-04-30T07:43:16.548Z",
+    "summary": "News 44",
+    "score": 0.9801321523581437,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 74",
+    "link": "#",
+    "pubDate": "2026-04-30T07:19:35.980Z",
+    "summary": "News 74",
+    "score": 0.8040365828047971,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 19",
+    "title": "News 0",
     "link": "#",
-    "pubDate": "2026-04-30T06:57:02.991Z",
-    "summary": "News 19",
-    "score": 0.9957016127625116,
+    "pubDate": "2026-04-30T07:20:16.003Z",
+    "summary": "News 0",
+    "score": 0.6211402208604115,
     "hits": 1,
     "trend": "new"
+  },
+  {
+    "title": "News 66",
+    "link": "#",
+    "pubDate": "2026-04-30T07:38:16.407Z",
+    "summary": "News 66",
+    "score": 0.4696618127029689,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 84",
+    "link": "#",
+    "pubDate": "2026-04-30T07:44:36.578Z",
+    "summary": "News 84",
+    "score": 0.2660030174285364,
+    "hits": 2,
+    "trend": "rising"
   },
   {
     "title": "News 83",
     "link": "#",
-    "pubDate": "2026-04-30T06:57:22.992Z",
+    "pubDate": "2026-04-30T07:26:56.135Z",
     "summary": "News 83",
-    "score": 0.007017512360229627,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 94",
-    "link": "#",
-    "pubDate": "2026-04-30T07:06:07.563Z",
-    "summary": "News 94",
-    "score": 0.244953510957852,
+    "score": 0.38859004626087523,
     "hits": 2,
     "trend": "rising"
   },
   {
-    "title": "News 12",
+    "title": "News 76",
     "link": "#",
-    "pubDate": "2026-04-30T06:58:03.022Z",
-    "summary": "News 12",
-    "score": 0.33636139634731255,
+    "pubDate": "2026-04-30T07:21:56.045Z",
+    "summary": "News 76",
+    "score": 0.023698908639672833,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 36",
+    "title": "News 5",
     "link": "#",
-    "pubDate": "2026-04-30T06:58:23.022Z",
-    "summary": "News 36",
-    "score": 0.263541018276523,
+    "pubDate": "2026-04-30T07:22:36.056Z",
+    "summary": "News 5",
+    "score": 0.2662958088708206,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 10",
+    "title": "News 35",
     "link": "#",
-    "pubDate": "2026-04-30T06:58:43.039Z",
-    "summary": "News 10",
-    "score": 0.008695643675888709,
+    "pubDate": "2026-04-30T07:22:56.063Z",
+    "summary": "News 35",
+    "score": 0.5410755384294503,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 78",
+    "title": "News 72",
     "link": "#",
-    "pubDate": "2026-04-30T07:04:07.500Z",
-    "summary": "News 78",
-    "score": 0.7884441370391629,
-    "hits": 2,
-    "trend": "rising"
+    "pubDate": "2026-04-30T07:23:36.072Z",
+    "summary": "News 72",
+    "score": 0.16612902781567673,
+    "hits": 1,
+    "trend": "new"
   },
   {
     "title": "News 62",
     "link": "#",
-    "pubDate": "2026-04-30T06:59:23.051Z",
+    "pubDate": "2026-04-30T07:30:36.207Z",
     "summary": "News 62",
-    "score": 0.15222668977551435,
+    "score": 0.6803665596968033,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 64",
+    "link": "#",
+    "pubDate": "2026-04-30T07:24:16.085Z",
+    "summary": "News 64",
+    "score": 0.8014707803302932,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 32",
+    "link": "#",
+    "pubDate": "2026-04-30T07:24:36.085Z",
+    "summary": "News 32",
+    "score": 0.15254386948255916,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 17",
+    "link": "#",
+    "pubDate": "2026-04-30T07:24:56.094Z",
+    "summary": "News 17",
+    "score": 0.12013674777506489,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 99",
+    "link": "#",
+    "pubDate": "2026-04-30T07:35:16.333Z",
+    "summary": "News 99",
+    "score": 0.2616895700678149,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 59",
+    "link": "#",
+    "pubDate": "2026-04-30T07:26:36.124Z",
+    "summary": "News 59",
+    "score": 0.009354615114991804,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 26",
+    "link": "#",
+    "pubDate": "2026-04-30T07:27:16.136Z",
+    "summary": "News 26",
+    "score": 0.6607185050176622,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 73",
+    "link": "#",
+    "pubDate": "2026-04-30T07:30:16.206Z",
+    "summary": "News 73",
+    "score": 0.3271544401487646,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 61",
+    "link": "#",
+    "pubDate": "2026-04-30T07:38:56.425Z",
+    "summary": "News 61",
+    "score": 0.6865076375259221,
+    "hits": 3,
+    "trend": "rising"
+  },
+  {
+    "title": "News 20",
+    "link": "#",
+    "pubDate": "2026-04-30T07:28:56.173Z",
+    "summary": "News 20",
+    "score": 0.6228897026087366,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 25",
+    "link": "#",
+    "pubDate": "2026-04-30T07:29:36.177Z",
+    "summary": "News 25",
+    "score": 0.9268170742566192,
     "hits": 1,
     "trend": "new"
   },
   {
     "title": "News 80",
     "link": "#",
-    "pubDate": "2026-04-30T06:59:43.055Z",
+    "pubDate": "2026-04-30T07:30:56.223Z",
     "summary": "News 80",
-    "score": 0.40644353645113196,
+    "score": 0.26097692558227115,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 95",
+    "title": "News 91",
     "link": "#",
-    "pubDate": "2026-04-30T07:04:47.522Z",
-    "summary": "News 95",
-    "score": 0.9067086147195749,
+    "pubDate": "2026-04-30T07:34:16.303Z",
+    "summary": "News 91",
+    "score": 0.6924861165478524,
     "hits": 2,
     "trend": "rising"
   },
   {
-    "title": "News 79",
+    "title": "News 41",
     "link": "#",
-    "pubDate": "2026-04-30T07:00:23.067Z",
-    "summary": "News 79",
-    "score": 0.6200436376777271,
+    "pubDate": "2026-04-30T07:31:36.234Z",
+    "summary": "News 41",
+    "score": 0.6556262540834228,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 60",
+    "title": "News 98",
     "link": "#",
-    "pubDate": "2026-04-30T07:00:43.073Z",
-    "summary": "News 60",
-    "score": 0.5360270207390897,
-    "hits": 1,
-    "trend": "new"
+    "pubDate": "2026-04-30T07:33:56.292Z",
+    "summary": "News 98",
+    "score": 0.7946988566987471,
+    "hits": 2,
+    "trend": "rising"
   },
   {
     "title": "News 56",
     "link": "#",
-    "pubDate": "2026-04-30T07:01:03.084Z",
+    "pubDate": "2026-04-30T07:32:36.256Z",
     "summary": "News 56",
-    "score": 0.3023136012488956,
+    "score": 0.7081620864047166,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 85",
+    "title": "News 71",
     "link": "#",
-    "pubDate": "2026-04-30T07:02:27.449Z",
-    "summary": "News 85",
-    "score": 0.4563079096636904,
+    "pubDate": "2026-04-30T07:32:56.273Z",
+    "summary": "News 71",
+    "score": 0.5355033326737825,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 41",
+    "title": "News 6",
     "link": "#",
-    "pubDate": "2026-04-30T07:02:47.466Z",
-    "summary": "News 41",
-    "score": 0.8677532382205412,
-    "hits": 1,
-    "trend": "new"
+    "pubDate": "2026-04-30T07:35:36.334Z",
+    "summary": "News 6",
+    "score": 0.6776288743515827,
+    "hits": 2,
+    "trend": "rising"
   },
   {
-    "title": "News 30",
+    "title": "News 36",
     "link": "#",
-    "pubDate": "2026-04-30T07:03:07.478Z",
-    "summary": "News 30",
-    "score": 0.024181792921894818,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 38",
-    "link": "#",
-    "pubDate": "2026-04-30T07:03:27.482Z",
-    "summary": "News 38",
-    "score": 0.42664838348324396,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 39",
-    "link": "#",
-    "pubDate": "2026-04-30T07:03:47.494Z",
-    "summary": "News 39",
-    "score": 0.7919113349298867,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 9",
-    "link": "#",
-    "pubDate": "2026-04-30T07:04:27.504Z",
-    "summary": "News 9",
-    "score": 0.24847470900952084,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 46",
-    "link": "#",
-    "pubDate": "2026-04-30T07:05:07.535Z",
-    "summary": "News 46",
-    "score": 0.23577340073125252,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 96",
-    "link": "#",
-    "pubDate": "2026-04-30T07:05:27.537Z",
-    "summary": "News 96",
-    "score": 0.8633440829575458,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 70",
-    "link": "#",
-    "pubDate": "2026-04-30T07:05:47.555Z",
-    "summary": "News 70",
-    "score": 0.21514264930151683,
-    "hits": 1,
-    "trend": "new"
-  },
-  {
-    "title": "News 47",
-    "link": "#",
-    "pubDate": "2026-04-30T07:06:27.565Z",
-    "summary": "News 47",
-    "score": 0.47860100694070384,
+    "pubDate": "2026-04-30T07:33:36.284Z",
+    "summary": "News 36",
+    "score": 0.12355918509834063,
     "hits": 1,
     "trend": "new"
   },
   {
     "title": "News 90",
     "link": "#",
-    "pubDate": "2026-04-30T07:06:47.567Z",
+    "pubDate": "2026-04-30T07:34:36.304Z",
     "summary": "News 90",
-    "score": 0.02359302082293302,
+    "score": 0.6903364552251035,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 7",
+    "title": "News 37",
     "link": "#",
-    "pubDate": "2026-04-30T07:07:07.581Z",
-    "summary": "News 7",
-    "score": 0.30131677945106117,
+    "pubDate": "2026-04-30T07:44:16.577Z",
+    "summary": "News 37",
+    "score": 0.6002455840272936,
+    "hits": 3,
+    "trend": "rising"
+  },
+  {
+    "title": "News 29",
+    "link": "#",
+    "pubDate": "2026-04-30T07:36:36.355Z",
+    "summary": "News 29",
+    "score": 0.43003171577551347,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 82",
+    "title": "News 30",
     "link": "#",
-    "pubDate": "2026-04-30T07:07:27.583Z",
-    "summary": "News 82",
-    "score": 0.6908009274768169,
+    "pubDate": "2026-04-30T07:36:56.373Z",
+    "summary": "News 30",
+    "score": 0.39114001589405756,
     "hits": 1,
     "trend": "new"
   },
   {
-    "title": "News 57",
+    "title": "News 15",
     "link": "#",
-    "pubDate": "2026-04-30T07:07:47.589Z",
-    "summary": "News 57",
-    "score": 0.402053744607922,
+    "pubDate": "2026-04-30T07:43:36.549Z",
+    "summary": "News 15",
+    "score": 0.9280135855135054,
+    "hits": 2,
+    "trend": "rising"
+  },
+  {
+    "title": "News 13",
+    "link": "#",
+    "pubDate": "2026-04-30T07:38:36.407Z",
+    "summary": "News 13",
+    "score": 0.2687571193777213,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 94",
+    "link": "#",
+    "pubDate": "2026-04-30T07:39:16.435Z",
+    "summary": "News 94",
+    "score": 0.4659298851904792,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 96",
+    "link": "#",
+    "pubDate": "2026-04-30T07:39:36.435Z",
+    "summary": "News 96",
+    "score": 0.5354474820623104,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 89",
+    "link": "#",
+    "pubDate": "2026-04-30T07:39:56.454Z",
+    "summary": "News 89",
+    "score": 0.17906680758038274,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 51",
+    "link": "#",
+    "pubDate": "2026-04-30T07:40:16.464Z",
+    "summary": "News 51",
+    "score": 0.9205775580799638,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 12",
+    "link": "#",
+    "pubDate": "2026-04-30T07:40:56.483Z",
+    "summary": "News 12",
+    "score": 0.5855766001291639,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 28",
+    "link": "#",
+    "pubDate": "2026-04-30T07:41:16.493Z",
+    "summary": "News 28",
+    "score": 0.3118321388579921,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 34",
+    "link": "#",
+    "pubDate": "2026-04-30T07:41:36.493Z",
+    "summary": "News 34",
+    "score": 0.8291738942193073,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 27",
+    "link": "#",
+    "pubDate": "2026-04-30T07:42:16.519Z",
+    "summary": "News 27",
+    "score": 0.42283052423474354,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 38",
+    "link": "#",
+    "pubDate": "2026-04-30T07:42:36.520Z",
+    "summary": "News 38",
+    "score": 0.2539233339789627,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 46",
+    "link": "#",
+    "pubDate": "2026-04-30T07:42:56.538Z",
+    "summary": "News 46",
+    "score": 0.8901036775697273,
+    "hits": 1,
+    "trend": "new"
+  },
+  {
+    "title": "News 50",
+    "link": "#",
+    "pubDate": "2026-04-30T07:43:56.567Z",
+    "summary": "News 50",
+    "score": 0.18331471234343677,
     "hits": 1,
     "trend": "new"
   }
