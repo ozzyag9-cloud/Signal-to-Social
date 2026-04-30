@@ -1,171 +1,100 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function Home() {
-  const [data, setData] = useState<any>(null);
+function getHeat(score:number){
+  if(score>0.9) return "#ff3b3b";
+  if(score>0.7) return "#ff8c00";
+  if(score>0.5) return "#ffd700";
+  return "#00ffe1";
+}
 
-  useEffect(() => {
-    fetch("/api/agent/run")
-      .then(res => res.json())
-      .then(setData);
+function isBreaking(n:any){
+  return Date.now() - new Date(n.pubDate).getTime() < 600000;
+}
 
-    const interval = setInterval(() => {
-      fetch("/api/agent/run")
-        .then(res => res.json())
-        .then(setData);
-    }, 60000);
+export default function Home(){
+  const [data,setData]=useState<any>(null);
+  const [filter,setFilter]=useState("ALL");
 
-    return () => clearInterval(interval);
-  }, []);
+  useEffect(()=>{
+    const es = new EventSource("/api/stream");
+    es.onmessage = e => setData(JSON.parse(e.data));
+    return ()=>es.close();
+  },[]);
 
-  if (!data) return <p style={{ color: "white" }}>Initializing system...</p>;
+  if(!data) return <p style={{color:"white"}}>Connecting...</p>;
+
+  const news = filter==="ALL"
+    ? data.news
+    : data.news.filter((n:any)=>n.source===filter);
 
   return (
-    <main className="container">
-      <h1 className="title">📡 SIGNAL INTELLIGENCE</h1>
+    <main style={{background:"#050505",color:"white",padding:20}}>
 
-      <div className="grid">
+      {data.news.some(isBreaking) && (
+        <div style={{
+          background:"red",
+          padding:10,
+          marginBottom:10,
+          animation:"blink 1s infinite"
+        }}>
+          🚨 BREAKING SIGNAL
+        </div>
+      )}
 
-        {/* TOP SIGNALS */}
-        <div className="card large">
-          <h2>🔥 Top Signals</h2>
-          {data.news?.slice(0, 5).map((n: any, i: number) => (
-            <div key={i} className="signal">
-              <a href={n.link} target="_blank">{n.title}</a>
-              <div className="meta">
-                {n.source} • {new Date(n.pubDate).toLocaleTimeString()}
+      <h1>📡 SIGNAL INTELLIGENCE</h1>
+
+      <select onChange={e=>setFilter(e.target.value)}>
+        <option>ALL</option>
+        <option>BBC</option>
+        <option>Reuters</option>
+        <option>DW</option>
+      </select>
+
+      <div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:15}}>
+
+        <div>
+          <h2>🔥 Signals</h2>
+          {news.slice(0,5).map((n:any,i:number)=>(
+            <div key={i}>
+              <a href={n.link} target="_blank"
+                style={{color:getHeat(n.score)}}
+              >
+                {n.title}
+              </a>
+              <div style={{fontSize:12,opacity:.6}}>
+                {n.source}
               </div>
             </div>
           ))}
         </div>
 
-        {/* LIVE PANEL */}
-        <div className="card">
-          <h2>📺 Live Feed</h2>
-          {data.videos?.map((v: any) => (
-            <iframe
-              key={v.id}
+        <div>
+          <h2>📺 Live</h2>
+          {data.videos.map((v:any)=>(
+            <iframe key={v.id}
               src={`https://www.youtube.com/embed/${v.id}`}
-              width="100%"
-              height="160"
+              width="100%" height="150"
             />
           ))}
         </div>
 
-        {/* SYSTEM STATUS */}
-        <div className="card">
-          <h2>🧠 System Status</h2>
-          <div className="status">
-            <span className="pulse"></span>
-            LIVE INGESTION ACTIVE
-          </div>
-        </div>
-
-        {/* NEWS GRID */}
-        <div className="card wide">
-          <h2>📰 Stream</h2>
-          <div className="newsGrid">
-            {data.news?.slice(5, 20).map((n: any, i: number) => (
-              <div key={i} className="newsItem">
-                <a href={n.link} target="_blank">{n.title}</a>
-              </div>
-            ))}
-          </div>
-        </div>
-
       </div>
 
+      <h2>🧠 Clusters</h2>
+      {data.clusters.slice(0,3).map((c:any,i:number)=>(
+        <div key={i} style={{marginBottom:10}}>
+          <b>Cluster {i+1}</b>
+          <p>{c.items.slice(0,3).map((x:any)=>x.title).join(". ")}</p>
+        </div>
+      ))}
+
       <style jsx>{`
-        .container {
-          background: #050505;
-          color: white;
-          min-height: 100vh;
-          padding: 20px;
-          font-family: sans-serif;
-        }
-
-        .title {
-          font-size: 28px;
-          margin-bottom: 20px;
-        }
-
-        .grid {
-          display: grid;
-          grid-template-columns: 2fr 1fr;
-          grid-auto-rows: minmax(100px, auto);
-          gap: 16px;
-        }
-
-        .card {
-          background: rgba(20,20,20,0.7);
-          border: 1px solid #1f1f1f;
-          border-radius: 14px;
-          padding: 14px;
-          backdrop-filter: blur(8px);
-          box-shadow: 0 0 20px rgba(0,255,200,0.05);
-          transition: transform 0.2s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-3px);
-        }
-
-        .large {
-          grid-row: span 2;
-        }
-
-        .wide {
-          grid-column: span 2;
-        }
-
-        .signal {
-          margin-bottom: 12px;
-        }
-
-        .signal a {
-          color: #00ffe1;
-          text-decoration: none;
-        }
-
-        .meta {
-          font-size: 12px;
-          opacity: 0.6;
-        }
-
-        .newsGrid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
-        }
-
-        .newsItem a {
-          font-size: 14px;
-          color: white;
-          text-decoration: none;
-        }
-
-        .status {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-top: 10px;
-          font-size: 14px;
-        }
-
-        .pulse {
-          width: 10px;
-          height: 10px;
-          background: #00ff88;
-          border-radius: 50%;
-          animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-          0% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.6); opacity: 0.5; }
-          100% { transform: scale(1); opacity: 1; }
+        @keyframes blink {
+          50% { opacity: 0.5 }
         }
       `}</style>
+
     </main>
   );
 }
