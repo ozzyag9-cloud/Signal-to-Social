@@ -1,103 +1,100 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export default function Home() {
   const [data, setData] = useState<any>(null);
-  const [livePulse, setLivePulse] = useState(false);
+  const [breaking, setBreaking] = useState<any>(null);
 
   useEffect(() => {
-    const eventSource = new EventSource("/api/stream");
+    const es = new EventSource("/api/stream");
 
-    eventSource.onmessage = (event) => {
-      const incoming = JSON.parse(event.data);
-      setData(incoming);
+    es.onmessage = (e) => {
+      const d = JSON.parse(e.data);
+      setData(d);
 
-      setLivePulse(true);
-      setTimeout(() => setLivePulse(false), 800);
+      if (d.news?.[0]?.score > 8) {
+        setBreaking(d.news[0]);
+      }
     };
 
-    return () => eventSource.close();
+    return () => es.close();
   }, []);
 
-  if (!data) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-black text-white">
-        Booting Intelligence Layer...
-      </div>
-    );
+  function getColor(score: number) {
+    if (score > 8) return "text-red-400";
+    if (score > 5) return "text-yellow-400";
+    return "text-gray-300";
   }
 
+  async function speak(text: string) {
+    try {
+      const res = await fetch("/api/voice", {
+        method: "POST",
+        body: JSON.stringify({ text })
+      });
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      new Audio(url).play();
+    } catch {
+      alert("Voice not ready (add ElevenLabs key)");
+    }
+  }
+
+  if (!data) return <div className="p-10 text-white">Booting...</div>;
+
   return (
-    <main className="min-h-screen bg-black text-white p-4 grid gap-4 grid-cols-12 auto-rows-[180px]">
+    <main className="min-h-screen bg-black text-white p-4 grid gap-4 grid-cols-12">
 
-      {/* HEADER */}
-      <div className="col-span-12 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">📡 Signal Intelligence</h1>
-
-        <motion.div
-          animate={{ scale: livePulse ? 1.4 : 1 }}
-          className="flex items-center gap-2 text-green-400"
-        >
-          <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-          LIVE
-        </motion.div>
-      </div>
+      {/* BREAKING BANNER */}
+      {breaking && (
+        <div className="col-span-12 bg-red-900 p-3 rounded animate-pulse">
+          🚨 BREAKING: {breaking.title}
+        </div>
+      )}
 
       {/* NEWS */}
-      <div className="col-span-6 row-span-2 bg-zinc-900 p-4 rounded-xl overflow-auto">
-        <h2 className="mb-3 text-gray-400">📰 Headlines</h2>
+      <div className="col-span-6 bg-zinc-900 p-4 rounded-xl overflow-auto">
+        <h2 className="mb-3">📰 Intelligence Feed</h2>
 
-        {data.news?.map((n: any, i: number) => (
-          <a
-            key={i}
-            href={n.link}
-            target="_blank"
-            className="block mb-2 text-sm hover:text-blue-400"
-          >
-            {n.title}
-          </a>
+        {data.news.map((n: any, i: number) => (
+          <div key={i} className="mb-3 border-b border-zinc-800 pb-2">
+
+            <a
+              href={n.link}
+              target="_blank"
+              className={`${getColor(n.score)} font-medium`}
+            >
+              {n.title}
+            </a>
+
+            <div className="flex gap-3 text-xs mt-2">
+              <span>Score: {n.score}</span>
+              <button onClick={() => speak(n.title)}>🔊 Voice</button>
+            </div>
+
+          </div>
         ))}
       </div>
 
       {/* MARKETS */}
       <div className="col-span-3 bg-zinc-900 p-4 rounded-xl">
-        <h2 className="mb-3 text-gray-400">📊 Markets</h2>
+        <h2>📊 Markets</h2>
         {data.finance?.map((f: any) => (
-          <div key={f.name} className="flex justify-between text-sm">
+          <div key={f.name} className="flex justify-between">
             <span>{f.name}</span>
             <span>{f.price}</span>
           </div>
         ))}
       </div>
 
-      {/* CRYPTO */}
-      <div className="col-span-3 bg-zinc-900 p-4 rounded-xl">
-        <h2 className="mb-3 text-gray-400">🪙 Crypto</h2>
-        {data.crypto?.map((c: any) => (
-          <div key={c.name} className="flex justify-between text-sm">
-            <span>{c.name}</span>
-            <span>${c.price}</span>
-          </div>
-        ))}
-      </div>
-
       {/* VIDEO */}
-      <div className="col-span-6 row-span-2 bg-zinc-900 rounded-xl overflow-hidden">
+      <div className="col-span-3 bg-zinc-900 rounded-xl overflow-hidden">
         <iframe
           className="w-full h-full"
           src="https://www.youtube.com/embed/hHW1oY26kxQ"
-          allowFullScreen
         />
-      </div>
-
-      {/* STATUS */}
-      <div className="col-span-6 bg-zinc-900 p-4 rounded-xl">
-        <h2 className="text-gray-400 mb-2">⚡ Live System</h2>
-        <p className="text-sm text-gray-500">
-          Streaming updates every 5 seconds.
-        </p>
       </div>
 
     </main>
