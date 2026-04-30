@@ -6,23 +6,28 @@ export async function fetchFinance(){
       return [];
     }
 
-    const res = await fetch(
-      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=SPY&apikey=${key}`
-    );
+    const symbols = ["SPY", "QQQ", "DIA"]; // multiple ETFs
 
-    const data = await res.json();
+    const results = [];
 
-    if(!data["Global Quote"]){
-      console.log("ALPHA VANTAGE LIMIT OR ERROR", data);
-      return [];
+    for (const symbol of symbols) {
+      const res = await fetch(
+        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${key}`
+      );
+
+      const data = await res.json();
+
+      if (data["Global Quote"]) {
+        results.push({
+          name: symbol,
+          price: data["Global Quote"]["05. price"]
+        });
+      } else {
+        console.log("ALPHA ERROR:", data);
+      }
     }
 
-    return [
-      {
-        name:"S&P 500",
-        price:data["Global Quote"]["05. price"]
-      }
-    ];
+    return results;
 
   }catch(e){
     console.error("FINANCE ERROR", e);
