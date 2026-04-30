@@ -1,6 +1,6 @@
 import { runPipeline } from "../agents/pipeline";
 import { publish } from "../publish/webhook";
-import { scoreItem } from "../engine/score";
+import { processSignals } from "../signals/engine";
 import { setLastRun } from "../state/store";
 
 let interval: any = null;
@@ -12,19 +12,16 @@ export function startLoop() {
     try {
       const data = await runPipeline();
 
-      const scored = data
-        .map((d: any) => ({ ...d, score: scoreItem(d) }))
-        .sort((a: any, b: any) => b.score - a.score)
-        .slice(0, 5);
+      const signals = processSignals(data).slice(0, 5);
 
-      await publish(scored);
+      await publish(signals);
 
       setLastRun(Date.now());
-      console.log("Loop run:", scored.length);
+      console.log("Signals:", signals.map(s => s.hits));
     } catch (e) {
       console.error("Loop error:", e);
     }
-  }, 20000); // every 20s
+  }, 20000);
 }
 
 export function stopLoop() {
