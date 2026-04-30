@@ -1,4 +1,10 @@
+import { runPipeline } from "@/lib/agents/pipeline";
+import { publish } from "@/lib/publish/webhook";
+
 export async function GET() {
-  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/agent/run`);
-  return Response.json({ triggered: true });
+  const data = await runPipeline();
+  const top = data.slice(0, 3);
+  await publish(top);
+
+  return Response.json({ triggered: true, processed: top.length });
 }
