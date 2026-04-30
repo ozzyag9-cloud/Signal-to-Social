@@ -142,18 +142,36 @@ export default function Home(){
             />
           </div>
 
-          {/* AI IMAGE PLACEHOLDER */}
+          {/* AI IMAGE */}
           <div style={{
             borderRadius:16,
-            height:200,
-            background:"linear-gradient(135deg,#111,#222)",
-            display:"flex",
-            alignItems:"center",
-            justifyContent:"center",
-            color:"#666",
-            border:"1px solid rgba(255,255,255,0.1)"
+            overflow:"hidden",
+            border:"1px solid rgba(255,255,255,0.1)",
+            height:200
           }}>
-            🧠 AI VISUAL (coming next phase)
+            {data.image ? (
+              <img
+                src={data.image}
+                alt="AI generated visual"
+                style={{
+                  width:"100%",
+                  height:"100%",
+                  objectFit:"cover"
+                }}
+              />
+            ) : (
+              <div style={{
+                width:"100%",
+                height:"100%",
+                display:"flex",
+                alignItems:"center",
+                justifyContent:"center",
+                color:"#666",
+                background:"#111"
+              }}>
+                🧠 Generating visual...
+              </div>
+            )}
           </div>
 
         </div>
