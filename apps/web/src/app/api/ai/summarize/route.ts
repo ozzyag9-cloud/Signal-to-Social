@@ -1,7 +1,9 @@
-import { summarize } from "@/lib/ai/summarize";
+import { summarizeCluster } from "@/lib/ai/summarize";
 
 export async function POST(req: Request) {
-  const { text } = await req.json();
-  const summary = await summarize(text);
+  const { cluster } = await req.json();
+
+  const summary = await summarizeCluster(cluster);
+
   return Response.json({ summary });
 }
