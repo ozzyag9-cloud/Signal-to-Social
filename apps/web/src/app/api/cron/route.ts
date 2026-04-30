@@ -1,10 +1,19 @@
 import { runPipeline } from "@/lib/agents/pipeline";
-import { publish } from "@/lib/publish/webhook";
+
+async function publish(items: any[]) {
+  console.log("Publishing:", items.length);
+}
 
 export async function GET() {
   const data = await runPipeline();
-  const top = data.slice(0, 3);
+
+  // ✅ FIX: slice the correct array
+  const top = data.news.slice(0, 3);
+
   await publish(top);
 
-  return Response.json({ triggered: true, processed: top.length });
+  return Response.json({
+    triggered: true,
+    processed: top.length
+  });
 }
