@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 
 function getHeat(score:number){
-  if(score>0.9) return "#ff3b3b";
-  if(score>0.7) return "#ff8c00";
-  if(score>0.5) return "#ffd700";
-  return "#00e5ff";
+  if(score>0.9) return "critical";
+  if(score>0.7) return "high";
+  if(score>0.5) return "medium";
+  return "low";
 }
 
 function isBreaking(n:any){
@@ -22,7 +22,7 @@ export default function Home(){
     return ()=>es.close();
   },[]);
 
-  if(!data) return <p style={{color:"white"}}>Initializing intelligence...</p>;
+  if(!data) return <p className="loading">Booting intelligence layer...</p>;
 
   const news = filter==="ALL"
     ? data.news
@@ -31,33 +31,29 @@ export default function Home(){
   return (
     <main className="container">
 
-      {/* BREAKING BANNER */}
+      {/* BREAKING */}
       {data.news.some(isBreaking) && (
-        <div className="breaking">🚨 BREAKING SIGNAL DETECTED</div>
+        <div className="breaking">🚨 BREAKING SIGNAL</div>
       )}
 
-      <div className="header">
-        <h1>📡 SIGNAL INTELLIGENCE</h1>
+      <header className="header">
+        <h1 className="title">SIGNAL INTELLIGENCE</h1>
         <select onChange={e=>setFilter(e.target.value)}>
           <option>ALL</option>
           <option>Reuters</option>
           <option>BBC</option>
           <option>DW</option>
         </select>
-      </div>
+      </header>
 
-      <div className="grid">
+      <section className="grid">
 
-        {/* TOP SIGNALS */}
-        <div className="card large">
-          <h2>🔥 Top Signals</h2>
+        {/* SIGNALS */}
+        <div className="card large fade">
+          <h2>Top Signals</h2>
           {news.slice(0,6).map((n:any,i:number)=>(
-            <div key={i} className="signal">
-              <a href={n.link} target="_blank"
-                style={{color:getHeat(n.score)}}
-              >
-                {n.title}
-              </a>
+            <div key={i} className={`signal ${getHeat(n.score)}`}>
+              <a href={n.link} target="_blank">{n.title}</a>
               <div className="meta">
                 {n.source} • {new Date(n.pubDate).toLocaleTimeString()}
               </div>
@@ -65,92 +61,108 @@ export default function Home(){
           ))}
         </div>
 
-        {/* VIDEO PANEL */}
-        <div className="card video">
-          <h2>📺 Live Intelligence Feed</h2>
-
+        {/* VIDEO */}
+        <div className="card fade">
+          <h2>Live Feed</h2>
           <div className="videoWrap">
-            <iframe
-              src="https://www.youtube.com/embed/Ap-UM1O9RBU"
-              allowFullScreen
-            />
-          </div>
-
-          <div className="videoWrap">
-            <iframe
-              src="https://www.youtube.com/embed/dF5Y8X4uY9k"
-              allowFullScreen
-            />
+            <iframe src="https://www.youtube.com/embed/Ap-UM1O9RBU" />
           </div>
         </div>
 
         {/* STATUS */}
-        <div className="card status">
-          <h2>🧠 System</h2>
-          <div className="statusRow">
+        <div className="card fade">
+          <h2>System</h2>
+          <div className="status">
             <span className="pulse"></span>
-            LIVE PROCESSING
-          </div>
-          <div className="statusRow">
-            Signals: {news.length}
+            ACTIVE
           </div>
         </div>
 
         {/* CLUSTERS */}
-        <div className="card wide">
-          <h2>🧠 Intelligence Clusters</h2>
+        <div className="card wide fade">
+          <h2>Clusters</h2>
           {data.clusters?.slice(0,3).map((c:any,i:number)=>(
             <div key={i} className="cluster">
-              <b>Cluster {i+1}</b>
               <p>{c.summary}</p>
             </div>
           ))}
         </div>
 
-      </div>
+      </section>
 
       <style jsx>{`
+
+        /* GLOBAL */
         .container {
-          background: radial-gradient(circle at top, #0a0a0a, #050505);
-          color: white;
+          background: radial-gradient(circle at top, #0a0a0a, #040404);
+          color: #eaeaea;
           min-height: 100vh;
-          padding: 20px;
-          font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+          padding: 24px;
+          font-family: "Inter", system-ui, sans-serif;
         }
 
-        .header {
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          margin-bottom:20px;
+        .title {
+          font-weight: 600;
+          letter-spacing: 1px;
+          font-size: 20px;
+          opacity: 0.9;
         }
 
+        /* GRID */
         .grid {
           display:grid;
           grid-template-columns: 2fr 1fr;
-          gap:16px;
+          gap:18px;
         }
 
         .card {
-          background: rgba(20,20,20,0.7);
+          background: rgba(20,20,20,0.65);
+          border-radius:18px;
+          padding:18px;
           border:1px solid rgba(255,255,255,0.05);
-          border-radius:16px;
-          padding:16px;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 0 40px rgba(0,255,200,0.05);
-          transition:0.3s;
+          backdrop-filter: blur(14px);
+          transition: all 0.3s ease;
         }
 
         .card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 0 60px rgba(0,255,200,0.15);
+          transform: translateY(-6px) scale(1.01);
         }
 
         .large { grid-row: span 2; }
         .wide { grid-column: span 2; }
 
+        /* SIGNAL */
         .signal {
-          margin-bottom:12px;
+          margin-bottom:14px;
+          padding:10px;
+          border-radius:10px;
+          transition:0.3s;
+        }
+
+        .signal a {
+          text-decoration:none;
+          color:white;
+        }
+
+        .signal:hover {
+          transform: translateX(4px);
+        }
+
+        /* HEAT GLOW SYSTEM */
+        .critical {
+          box-shadow: 0 0 12px rgba(255,50,50,0.6);
+        }
+
+        .high {
+          box-shadow: 0 0 10px rgba(255,140,0,0.5);
+        }
+
+        .medium {
+          box-shadow: 0 0 8px rgba(255,215,0,0.4);
+        }
+
+        .low {
+          opacity:0.85;
         }
 
         .meta {
@@ -158,31 +170,29 @@ export default function Home(){
           opacity:0.6;
         }
 
-        /* VIDEO FIX (no squeeze) */
+        /* VIDEO */
         .videoWrap {
           position:relative;
           width:100%;
           padding-top:56.25%;
-          margin-bottom:12px;
-          border-radius:12px;
+          border-radius:14px;
           overflow:hidden;
         }
 
         .videoWrap iframe {
           position:absolute;
-          top:0;
-          left:0;
           width:100%;
           height:100%;
+          top:0;
+          left:0;
           border:none;
         }
 
         /* STATUS */
-        .statusRow {
+        .status {
           display:flex;
           align-items:center;
-          gap:8px;
-          margin-top:10px;
+          gap:10px;
         }
 
         .pulse {
@@ -190,30 +200,42 @@ export default function Home(){
           height:10px;
           background:#00ff88;
           border-radius:50%;
-          animation:pulse 1.5s infinite;
+          animation:pulse 1.4s infinite;
         }
 
         @keyframes pulse {
-          50% { transform:scale(1.6); opacity:0.5; }
+          50% { transform:scale(1.5); opacity:0.4; }
         }
 
         /* BREAKING */
         .breaking {
-          background:red;
+          background: linear-gradient(90deg, red, darkred);
           padding:10px;
-          margin-bottom:15px;
+          margin-bottom:14px;
           text-align:center;
-          font-weight:bold;
+          font-weight:600;
           animation:blink 1s infinite;
         }
 
         @keyframes blink {
-          50% { opacity:0.5; }
+          50% { opacity:0.6; }
         }
 
-        .cluster {
-          margin-bottom:10px;
-          opacity:0.9;
+        /* FADE-IN */
+        .fade {
+          animation:fadeIn 0.6s ease forwards;
+          opacity:0;
+        }
+
+        @keyframes fadeIn {
+          to { opacity:1; transform:translateY(0); }
+          from { opacity:0; transform:translateY(10px); }
+        }
+
+        /* LOADING */
+        .loading {
+          color:white;
+          padding:40px;
         }
 
       `}</style>
