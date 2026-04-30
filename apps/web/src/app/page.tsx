@@ -3,36 +3,44 @@ import { useEffect, useState } from "react";
 
 export default function Home(){
   const [data,setData]=useState<any>(null);
+  const [error,setError]=useState<any>(null);
 
   useEffect(()=>{
-    fetch("/api/feed")
-      .then(res=>res.json())
-      .then(setData);
+    async function load(){
+      try {
+        console.log("Fetching /api/feed...");
+        const res = await fetch("/api/feed");
 
-    // trigger background refresh
-    fetch("/api/update");
+        console.log("Response status:", res.status);
+
+        const json = await res.json();
+
+        console.log("DATA RECEIVED:", json);
+
+        setData(json);
+
+      } catch (e:any) {
+        console.error("FETCH ERROR:", e);
+        setError(e.message);
+      }
+    }
+
+    load();
   },[]);
 
-  if(!data) return <p style={{color:"white"}}>Loading intelligence...</p>;
+  if(error){
+    return <pre style={{color:"red"}}>ERROR: {error}</pre>;
+  }
+
+  if(!data){
+    return <p style={{color:"white"}}>Booting intelligence layer...</p>;
+  }
 
   return (
     <main style={{padding:20,color:"white",background:"#050505"}}>
       <h1>📡 Signal Intelligence</h1>
 
-      <h2>📰 News</h2>
-      {data.news?.slice(0,5).map((n:any,i:number)=>(
-        <div key={i}>
-          <a href={n.link}>{n.title}</a>
-        </div>
-      ))}
-
-      <h2>📺 Live</h2>
-      {data.videos?.map((v:any)=>(
-        <iframe key={v.id}
-          src={`https://www.youtube.com/embed/${v.id}`}
-          width="100%" height="200"
-        />
-      ))}
+      <pre>{JSON.stringify(data,null,2)}</pre>
     </main>
   );
 }
