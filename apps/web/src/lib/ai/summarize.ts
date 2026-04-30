@@ -1,4 +1,23 @@
 export async function summarize(text: string) {
-  // Placeholder (plug OpenAI later)
-  return text.slice(0, 200) + "...";
+  if (!process.env.OPENAI_API_KEY) {
+    return text.slice(0, 200) + "...";
+  }
+
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "Summarize news in 1 short sentence." },
+        { role: "user", content: text }
+      ]
+    })
+  });
+
+  const json = await res.json();
+  return json.choices?.[0]?.message?.content || text;
 }
