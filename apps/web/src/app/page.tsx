@@ -7,7 +7,6 @@ function clean(text:string){
 
 export default function Home(){
   const [data,setData]=useState<any>(null);
-  const [summary,setSummary]=useState<string | null>(null);
 
   useEffect(()=>{
     fetch("/api/feed")
@@ -17,26 +16,6 @@ export default function Home(){
     fetch("/api/update");
   },[]);
 
-  async function getSummary(text:string){
-    const res = await fetch("/api/ai/summarize",{
-      method:"POST",
-      body: JSON.stringify({ text })
-    });
-    const json = await res.json();
-    setSummary(json.summary);
-  }
-
-  function speak(text:string){
-    const utterance = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(utterance);
-  }
-
-  function share(link:string){
-    const url = encodeURIComponent(link);
-
-    window.open(`https://wa.me/?text=${url}`);
-  }
-
   if(!data){
     return <div style={{padding:40}}>⚡ Booting Intelligence...</div>;
   }
@@ -45,116 +24,121 @@ export default function Home(){
     <main style={{
       background:"#0a0a0a",
       color:"#fff",
-      padding:24,
-      fontFamily:"Georgia, serif",
+      fontFamily:"system-ui",
       minHeight:"100vh"
     }}>
 
-      {/* HERO */}
-      <h1 style={{
-        fontSize:42,
-        marginBottom:20,
-        lineHeight:1.2
+      {/* 🔴 CRYPTO TICKER */}
+      <div style={{
+        whiteSpace:"nowrap",
+        overflow:"hidden",
+        borderBottom:"1px solid #222",
+        padding:"8px 0",
+        fontSize:13,
+        opacity:0.8
       }}>
-        Global Signal Intelligence
-      </h1>
+        <div style={{
+          display:"inline-block",
+          animation:"scroll 20s linear infinite"
+        }}>
+          ₿ BTC 62,000 ▲ • ETH 3,200 ▼ • SOL 140 ▲ • GLOBAL MARKETS ACTIVE •
+        </div>
+      </div>
 
-      {/* GRID */}
+      {/* HEADER */}
+      <div style={{padding:20}}>
+        <h1 style={{fontSize:36}}>Signal Intelligence</h1>
+      </div>
+
+      {/* MAIN GRID */}
       <div style={{
         display:"grid",
-        gridTemplateColumns:"2fr 1fr",
-        gap:20
+        gridTemplateColumns:"2fr 1fr 1fr",
+        gap:20,
+        padding:20
       }}>
 
-        {/* NEWS */}
+        {/* 📰 NEWS */}
         <div>
-          {data.news?.slice(0,8).map((n:any,i:number)=>(
-            <div key={i} style={{
-              marginBottom:20,
-              paddingBottom:15,
-              borderBottom:"1px solid #222",
-              cursor:"pointer",
-              transition:"0.3s"
-            }}
-            onMouseEnter={(e:any)=>{
-              e.currentTarget.style.transform="scale(1.02)";
-            }}
-            onMouseLeave={(e:any)=>{
-              e.currentTarget.style.transform="scale(1)";
-            }}
-            >
-
-              <h2 style={{
-                fontSize:20,
-                marginBottom:6
-              }}>
+          {data.news?.slice(0,6).map((n:any,i:number)=>(
+            <div key={i} style={{marginBottom:15}}>
+              <a href={n.link} target="_blank">
                 {clean(n.title)}
-              </h2>
-
-              <div style={{fontSize:12,opacity:0.6}}>
-                {n.source}
-              </div>
-
-              {/* ACTIONS */}
-              <div style={{
-                marginTop:8,
-                display:"flex",
-                gap:10,
-                flexWrap:"wrap"
-              }}>
-                <button onClick={()=>getSummary(n.title)}>🧠 Summary</button>
-                <button onClick={()=>speak(n.title)}>🔊 Listen</button>
-                <button onClick={()=>share(n.link)}>📤 Share</button>
-                <a href={n.link} target="_blank">🔗 Open</a>
-              </div>
-
+              </a>
             </div>
           ))}
         </div>
 
-        {/* SIDE */}
-        <div>
+        {/* 📊 FINANCE */}
+        <div style={{
+          background:"#111",
+          padding:15,
+          borderRadius:10
+        }}>
+          <h3>📊 Markets</h3>
 
-          {/* VIDEO */}
+          <div>🇺🇸 S&P 500</div>
+          <div>🇬🇧 FTSE 100</div>
+          <div>🇯🇵 Nikkei 225</div>
+          <div>🇪🇺 Euro Stoxx</div>
+
+          <div style={{marginTop:10,fontSize:12,opacity:0.6}}>
+            (API coming next phase)
+          </div>
+        </div>
+
+        {/* 📺 LIVE VIDEO */}
+        <div>
           <iframe
-            src={`https://www.youtube.com/embed/${data.videos?.[0]?.id}`}
+            src="https://www.youtube.com/embed/hHW1oY26kxQ"
             style={{
               width:"100%",
-              height:220,
-              border:"none",
-              marginBottom:20
+              height:200,
+              border:"none"
             }}
           />
 
-          {/* AI IMAGE */}
           {data.image && (
             <img
               src={data.image}
               style={{
                 width:"100%",
-                height:220,
+                height:200,
                 objectFit:"cover",
-                marginBottom:20
+                marginTop:10
               }}
             />
           )}
+        </div>
 
-          {/* SUMMARY BOX */}
-          {summary && (
-            <div style={{
-              background:"#111",
-              padding:15,
-              borderRadius:10
-            }}>
-              <h3>AI Summary</h3>
-              <p style={{fontSize:14,opacity:0.8}}>
-                {summary}
-              </p>
-            </div>
-          )}
+      </div>
 
+      {/* 🌍 EVENTS */}
+      <div style={{
+        padding:20,
+        borderTop:"1px solid #222"
+      }}>
+        <h3>🌍 Global Events</h3>
+
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"repeat(3,1fr)",
+          gap:10
+        }}>
+          <div>🎵 Music Festivals</div>
+          <div>🎨 Art Exhibitions</div>
+          <div>🏛 Political Events</div>
         </div>
       </div>
+
+      {/* ANIMATIONS */}
+      <style>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+
     </main>
   );
 }
