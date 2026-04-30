@@ -1,36 +1,31 @@
-export async function fetchFinance(){
-  try{
-    const key = process.env.ALPHA_VANTAGE_API_KEY;
-    if(!key){
-      console.log("NO API KEY");
-      return [];
-    }
+export async function fetchFinance() {
+  try {
+    const symbols = ["^GSPC", "^IXIC", "^DJI"]; // S&P500, Nasdaq, Dow
 
-    const symbols = ["SPY", "QQQ", "DIA"]; // multiple ETFs
+    const results = await Promise.all(
+      symbols.map(async (symbol) => {
+        const res = await fetch(
+          `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`,
+          { cache: "no-store" }
+        );
 
-    const results = [];
+        const data = await res.json();
+        const quote = data?.quoteResponse?.result?.[0];
 
-    for (const symbol of symbols) {
-      const res = await fetch(
-        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${key}`
-      );
+        if (!quote) return null;
 
-      const data = await res.json();
-
-      if (data["Global Quote"]) {
-        results.push({
+        return {
           name: symbol,
-          price: data["Global Quote"]["05. price"]
-        });
-      } else {
-        console.log("ALPHA ERROR:", data);
-      }
-    }
+          price: quote.regularMarketPrice,
+          change: quote.regularMarketChangePercent
+        };
+      })
+    );
 
-    return results;
+    return results.filter(Boolean);
 
-  }catch(e){
-    console.error("FINANCE ERROR", e);
+  } catch (e) {
+    console.error("YAHOO FINANCE ERROR", e);
     return [];
   }
 }
