@@ -1,44 +1,40 @@
 import { fetchRSS } from "../sources/rss";
-import { getYouTubeVideos } from "../sources/youtube";
-import { generateImage } from "../ai/image";
-import { sendAlert } from "../alerts/send";
+import { fetchCrypto } from "../sources/crypto";
+import { fetchFinance } from "../sources/finance";
 
-export async function runPipeline() {
-  try {
-    const newsRaw = await fetchRSS("https://feeds.bbci.co.uk/news/rss.xml");
+export async function runPipeline(){
+  try{
 
-    const news = newsRaw.map((n:any) => ({
-      ...n,
-      source: "BBC"
-    }));
+    const rssSources = [
+      process.env.RSS_1,
+      process.env.RSS_2,
+      process.env.RSS_3
+    ].filter(Boolean);
 
-    const topHeadline = news[0]?.title || "global news";
+    const rssResults = await Promise.all(
+      rssSources.map((url:any)=>fetchRSS(url))
+    );
 
-    const image = await generateImage(topHeadline);
+    const news = rssResults.flat();
 
-    // 🔔 trigger alert for premium users
-    await sendAlert(`🚨 ${topHeadline}`);
-
-    const videos = [
-      { id: "M7lc1UVf-VE", title: "News Feed" },
-      { id: "hHW1oY26kxQ", title: "Live Global News" }
-    ];
+    const crypto = await fetchCrypto();
+    const finance = await fetchFinance();
 
     return {
       news,
-      clusters: [],
-      videos,
-      image
+      crypto,
+      finance,
+      updatedAt: new Date().toISOString()
     };
 
-  } catch (err:any) {
-    console.error("PIPELINE ERROR:", err);
+  }catch(e){
+    console.error("PIPELINE ERROR", e);
 
     return {
       news: [],
-      clusters: [],
-      videos: [],
-      image: null
+      crypto: [],
+      finance: [],
+      updatedAt: null
     };
   }
 }
