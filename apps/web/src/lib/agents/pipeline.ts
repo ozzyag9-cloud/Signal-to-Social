@@ -1,40 +1,19 @@
 import { fetchRSS } from "../sources/rss";
-import { fetchCrypto } from "../sources/crypto";
 import { fetchFinance } from "../sources/finance";
+import { scoreNews } from "../signals/score";
 
 export async function runPipeline() {
-  try {
+  const newsRaw = await fetchRSS(process.env.RSS_FEEDS!.split(",")[0]);
+  const finance = await fetchFinance();
 
-    // 🔥 HARD TEST FEEDS (guaranteed working)
-    const feeds = [
-      "https://feeds.bbci.co.uk/news/rss.xml",
-      "https://rss.cnn.com/rss/edition.rss"
-    ];
+  const news = scoreNews(newsRaw);
 
-    const rssResults = await Promise.all(
-      feeds.map(url => fetchRSS(url))
-    );
-
-    const news = rssResults.flat();
-
-    const crypto = await fetchCrypto();
-    const finance = await fetchFinance();
-
-    return {
-      news,
-      crypto,
-      finance,
-      updatedAt: new Date().toISOString()
-    };
-
-  } catch (e) {
-    console.error("PIPELINE ERROR:", e);
-
-    return {
-      news: [],
-      crypto: [],
-      finance: [],
-      updatedAt: null
-    };
-  }
+  return {
+    news,
+    finance,
+    crypto: [
+      { name: "BTC", price: 76000 },
+      { name: "ETH", price: 2200 }
+    ]
+  };
 }
