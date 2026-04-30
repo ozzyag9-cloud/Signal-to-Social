@@ -1,10 +1,13 @@
 import fs from "fs";
+import path from "path";
 
-const FILE = "apps/web/data/memory.json";
+const FILE = path.join(process.cwd(), "apps/web/data/memory.json");
 
 function ensureFile() {
-  if (!fs.existsSync("apps/web/data")) {
-    fs.mkdirSync("apps/web/data", { recursive: true });
+  const dir = path.dirname(FILE);
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
 
   if (!fs.existsSync(FILE)) {
@@ -15,7 +18,8 @@ function ensureFile() {
 export function loadMemory() {
   ensureFile();
   try {
-    return JSON.parse(fs.readFileSync(FILE, "utf-8"));
+    const raw = fs.readFileSync(FILE, "utf-8");
+    return JSON.parse(raw || "[]");
   } catch {
     return [];
   }
@@ -24,4 +28,5 @@ export function loadMemory() {
 export function saveMemory(data: any) {
   ensureFile();
   fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
+  console.log("💾 Memory saved:", data.length);
 }
