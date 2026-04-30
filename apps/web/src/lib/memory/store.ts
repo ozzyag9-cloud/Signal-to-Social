@@ -10,3 +10,16 @@ export function getPreferences(email:string){
 export function updatePreferences(email:string, prefs:any){
   memory[email] = { ...getPreferences(email), ...prefs };
 }
+
+
+// --- COMPATIBILITY LAYER (for legacy engine) ---
+
+let globalMemory:any = {};
+
+export function loadMemory(){
+  return globalMemory;
+}
+
+export function saveMemory(data:any){
+  globalMemory = data;
+}
