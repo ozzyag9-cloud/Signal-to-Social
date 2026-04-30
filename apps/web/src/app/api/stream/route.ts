@@ -5,30 +5,44 @@ export async function GET() {
     async start(controller) {
       const encoder = new TextEncoder();
 
+      // 🔥 SEND IMMEDIATE RESPONSE (NO WAIT)
+      controller.enqueue(
+        encoder.encode(`data: ${JSON.stringify({
+          news: [],
+          clusters: [],
+          videos: [],
+          status: "booting"
+        })}\n\n`)
+      );
+
       async function send() {
         try {
           const data = await runPipeline();
 
           controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
+            encoder.encode(`data: ${JSON.stringify({
+              ...data,
+              status: "live"
+            })}\n\n`)
           );
 
         } catch (err:any) {
           console.error("STREAM ERROR:", err);
 
-          // fallback so UI doesn't freeze
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify({
               news: [],
               clusters: [],
               videos: [],
-              error: "pipeline_failed"
+              status: "error"
             })}\n\n`)
           );
         }
       }
 
-      await send();
+      // run async AFTER first response
+      setTimeout(send, 1000);
+
       const interval = setInterval(send, 30000);
 
       return () => clearInterval(interval);
