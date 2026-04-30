@@ -1,7 +1,11 @@
 import { fetchRSS } from "../sources/rss";
 import { getYouTubeVideos } from "../sources/youtube";
 import { scoreNews } from "./scoring";
-import { clusterNews } from "./cluster";
+
+import { semanticCluster } from "../ai/cluster";
+import { summarizeCluster } from "../ai/summarize";
+import { embed } from "../ai/embeddings";
+import { detectAnomalies } from "../ai/anomaly";
 
 const SOURCES = [
   { url: "https://feeds.bbci.co.uk/news/rss.xml", source: "BBC" },
@@ -13,19 +17,31 @@ export async function runPipeline() {
   const results = await Promise.all(
     SOURCES.map(async (s) => {
       const items = await fetchRSS(s.url);
-      return items.map((i:any)=>({...i, source: s.source}));
+      return items.map((i:any)=>({...i, source:s.source}));
     })
   );
 
   const merged = results.flat();
 
-  const sorted = merged.sort((a,b)=>
-    new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
-  );
+  const ranked = scoreNews(merged);
 
-  const ranked = scoreNews(sorted);
-  const clusters = clusterNews(ranked);
+  // --- AI CLUSTERING ---
+  const clusters = await semanticCluster(ranked.slice(0,20), embed);
+
+  // --- AI SUMMARIES ---
+  for (const c of clusters) {
+    c.summary = await summarizeCluster(c);
+  }
+
+  // --- ANOMALIES ---
+  const anomalies = detectAnomalies(ranked);
+
   const videos = getYouTubeVideos();
 
-  return { news: ranked, clusters, videos };
+  return {
+    news: ranked,
+    clusters,
+    anomalies,
+    videos
+  };
 }
