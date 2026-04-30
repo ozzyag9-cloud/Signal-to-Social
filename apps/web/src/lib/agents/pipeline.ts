@@ -1,48 +1,40 @@
 import { fetchRSS } from "../sources/rss";
 import { getYouTubeVideos } from "../sources/youtube";
+import { generateImage } from "../ai/image";
 
 export async function runPipeline() {
   try {
     const newsRaw = await fetchRSS("https://feeds.bbci.co.uk/news/rss.xml");
 
-    // 🔥 ensure valid structure
     const news = newsRaw.map((n:any) => ({
       ...n,
       source: "BBC"
     }));
 
+    // 🔥 generate ONE image based on top headline
+    const topHeadline = news[0]?.title || "global news";
+    const image = await generateImage(topHeadline);
+
     const videos = [
-      { id: "M7lc1UVf-VE", title: "YouTube News Demo" },
-      { id: "hHW1oY26kxQ", title: "Global News Live" }
+      { id: "M7lc1UVf-VE", title: "YouTube News" },
+      { id: "hHW1oY26kxQ", title: "Live News" }
     ];
 
     return {
-      news: news.length ? news : [
-        {
-          title: "Fallback News (pipeline working)",
-          link: "#",
-          pubDate: new Date().toISOString(),
-          source: "system"
-        }
-      ],
+      news,
       clusters: [],
-      videos
+      videos,
+      image
     };
 
   } catch (err:any) {
     console.error("PIPELINE ERROR:", err);
 
     return {
-      news: [
-        {
-          title: "Pipeline failed — fallback active",
-          link: "#",
-          pubDate: new Date().toISOString(),
-          source: "system"
-        }
-      ],
+      news: [],
       clusters: [],
-      videos: []
+      videos: [],
+      image: null
     };
   }
 }
