@@ -32,7 +32,6 @@ export default function Home(){
           src={`https://www.youtube.com/embed/${v.id}`}
           width="100%" height="200"
         />
-      ))}
-    </main>
+      ))}    </main>
   );
 }
