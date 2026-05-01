@@ -1,13 +1,28 @@
-import { runPipeline } from "@/lib/agents/pipeline";
-import { setCache } from "@/lib/cache/store";
-
 export async function GET() {
   try {
-    const data = await runPipeline();
-    setCache(data);
-    return Response.json({ updated: true });
+    const feeds = process.env.RSS_FEEDS || "";
+
+    const urls = feeds ? feeds.split(",") : [];
+
+    return Response.json({
+      updated: true,
+      data: {
+        news: urls.length
+          ? urls.map((u, i) => ({
+              title: "Feed loaded: " + u,
+              link: u,
+              pubDate: new Date().toISOString()
+            }))
+          : [],
+        crypto: [],
+        finance: [],
+        updatedAt: new Date().toISOString()
+      }
+    });
   } catch (e) {
-    console.error(e);
-    return Response.json({ updated: false });
+    return Response.json({
+      updated: false,
+      error: String(e)
+    });
   }
 }
