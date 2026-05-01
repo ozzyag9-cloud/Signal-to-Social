@@ -3,15 +3,19 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [lesson, setLesson] = useState<any>(null);
+  const [topics, setTopics] = useState<any[]>([]);
+  const [selected, setSelected] = useState<any>(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/api/lesson")
+    fetch("/api/topics")
       .then(res => res.json())
-      .then(setLesson);
+      .then(data => {
+        setTopics(data);
+        setSelected(data[0]);
+      });
   }, []);
 
   async function ask() {
@@ -28,101 +32,133 @@ export default function Home() {
     setLoading(false);
   }
 
-  if (!lesson) return <p>Loading theological intelligence...</p>;
+  if (!selected) return <p>Loading...</p>;
 
   return (
     <main style={{
-      padding: 20,
+      display: "grid",
+      gridTemplateColumns: "250px 1fr",
+      height: "100vh",
       background: "#0b0b0f",
-      color: "#eaeaea",
-      fontFamily: "serif",
-      maxWidth: 900,
-      margin: "auto"
+      color: "white",
+      fontFamily: "Inter, sans-serif"
     }}>
-      <h1 style={{ fontSize: 32 }}>✝️ Theological Intelligence</h1>
 
-      {/* DAILY LESSON */}
-      <div style={{
-        marginTop: 20,
-        padding: 20,
-        border: "1px solid #333",
-        borderRadius: 12
+      {/* SIDEBAR */}
+      <aside style={{
+        borderRight: "1px solid #222",
+        padding: 20
       }}>
-        <h2>{lesson.topic.title}</h2>
-        <p>{lesson.topic.description}</p>
+        <h2 style={{ marginBottom: 20 }}>✝️ Topics</h2>
 
-        <h3>📚 Sources</h3>
-        {lesson.topic.sources.map((s: string, i: number) => (
-          <p key={i}>• {s}</p>
-        ))}
-
-        <button
-          onClick={() => {
-            setQuestion(`Explain ${lesson.topic.title} in depth`);
-            ask();
-          }}
-          style={{
-            marginTop: 10,
-            padding: 10,
-            background: "#222",
-            border: "none",
-            borderRadius: 8,
-            color: "white",
-            cursor: "pointer"
-          }}
-        >
-          Dive deeper
-        </button>
-      </div>
-
-      {/* ASK AI */}
-      <div style={{
-        marginTop: 30,
-        padding: 20,
-        border: "1px solid #333",
-        borderRadius: 12
-      }}>
-        <h2>Ask a theologian</h2>
-
-        <input
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask about Trinity, Christ, Church history..."
-          style={{
-            width: "100%",
-            padding: 10,
-            marginTop: 10,
-            borderRadius: 8,
-            border: "1px solid #444",
-            background: "#111",
-            color: "white"
-          }}
-        />
-
-        <button
-          onClick={ask}
-          style={{
-            marginTop: 10,
-            padding: 10,
-            background: "#444",
-            border: "none",
-            borderRadius: 8,
-            color: "white",
-            cursor: "pointer"
-          }}
-        >
-          Ask
-        </button>
-
-        {loading && <p>Thinking...</p>}
-
-        {answer && (
-          <div style={{ marginTop: 20 }}>
-            <h3>Response</h3>
-            <p>{answer}</p>
+        {topics.map((t, i) => (
+          <div
+            key={i}
+            onClick={() => setSelected(t)}
+            style={{
+              padding: 10,
+              marginBottom: 10,
+              cursor: "pointer",
+              borderRadius: 8,
+              background: selected?.id === t.id ? "#222" : "transparent"
+            }}
+          >
+            {t.title}
           </div>
-        )}
-      </div>
+        ))}
+      </aside>
+
+      {/* MAIN GRID */}
+      <section style={{
+        padding: 20,
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gridTemplateRows: "auto auto",
+        gap: 20,
+        overflowY: "auto"
+      }}>
+
+        {/* MAIN CARD */}
+        <div style={{
+          gridColumn: "span 2",
+          padding: 20,
+          border: "1px solid #222",
+          borderRadius: 12
+        }}>
+          <h1 style={{ fontSize: 28 }}>{selected.title}</h1>
+          <p>{selected.description}</p>
+
+          <button
+            onClick={() => {
+              setQuestion(`Explain ${selected.title} in depth`);
+              ask();
+            }}
+            style={{
+              marginTop: 10,
+              padding: 10,
+              background: "#333",
+              borderRadius: 8,
+              border: "none",
+              cursor: "pointer"
+            }}
+          >
+            Dive deeper
+          </button>
+        </div>
+
+        {/* SOURCES */}
+        <div style={{
+          padding: 20,
+          border: "1px solid #222",
+          borderRadius: 12
+        }}>
+          <h3>📚 Sources</h3>
+          {selected.sources.map((s: string, i: number) => (
+            <p key={i}>• {s}</p>
+          ))}
+        </div>
+
+        {/* ASK AI */}
+        <div style={{
+          padding: 20,
+          border: "1px solid #222",
+          borderRadius: 12
+        }}>
+          <h3>Ask</h3>
+
+          <input
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ask a theological question..."
+            style={{
+              width: "100%",
+              padding: 10,
+              marginTop: 10,
+              borderRadius: 8,
+              border: "1px solid #333",
+              background: "#111",
+              color: "white"
+            }}
+          />
+
+          <button
+            onClick={ask}
+            style={{
+              marginTop: 10,
+              padding: 10,
+              background: "#444",
+              borderRadius: 8,
+              border: "none"
+            }}
+          >
+            Ask
+          </button>
+
+          {loading && <p>Thinking...</p>}
+          {answer && <p style={{ marginTop: 10 }}>{answer}</p>}
+        </div>
+
+      </section>
     </main>
   );
 }
