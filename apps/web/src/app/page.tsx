@@ -4,99 +4,69 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState<any>(null);
-  const [breaking, setBreaking] = useState<any>(null);
+  const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
-    const es = new EventSource("/api/stream");
+    fetch("/api/update")
+      .then(res => res.json())
+      .then(d => setData(d.data));
 
-    es.onmessage = (e) => {
-      const d = JSON.parse(e.data);
-      setData(d);
-
-      if (d.news?.[0]?.score > 8) {
-        setBreaking(d.news[0]);
-      }
-    };
-
-    return () => es.close();
+    fetch("/api/events")
+      .then(res => res.json())
+      .then(d => setEvents(d.events || []));
   }, []);
 
-  function getColor(score: number) {
-    if (score > 8) return "text-red-400";
-    if (score > 5) return "text-yellow-400";
-    return "text-gray-300";
-  }
-
-  async function speak(text: string) {
-    try {
-      const res = await fetch("/api/voice", {
-        method: "POST",
-        body: JSON.stringify({ text })
-      });
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      new Audio(url).play();
-    } catch {
-      alert("Voice not ready (add ElevenLabs key)");
-    }
-  }
-
-  if (!data) return <div className="p-10 text-white">Booting...</div>;
+  if (!data) return <p style={{ padding: 20 }}>⚡ Booting...</p>;
 
   return (
-    <main className="min-h-screen bg-black text-white p-4 grid gap-4 grid-cols-12">
+    <main style={{ padding: 20, background: "#050505", color: "white" }}>
+      <h1>📡 Signal Intelligence</h1>
 
-      {/* BREAKING BANNER */}
-      {breaking && (
-        <div className="col-span-12 bg-red-900 p-3 rounded animate-pulse">
-          🚨 BREAKING: {breaking.title}
-        </div>
-      )}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: 15
+      }}>
 
-      {/* NEWS */}
-      <div className="col-span-6 bg-zinc-900 p-4 rounded-xl overflow-auto">
-        <h2 className="mb-3">📰 Intelligence Feed</h2>
-
-        {data.news.map((n: any, i: number) => (
-          <div key={i} className="mb-3 border-b border-zinc-800 pb-2">
-
-            <a
-              href={n.link}
-              target="_blank"
-              className={`${getColor(n.score)} font-medium`}
-            >
+        {/* NEWS */}
+        <div style={{ background: "#111", padding: 15 }}>
+          <h2>📰 News</h2>
+          {data.news?.slice(0, 5).map((n: any, i: number) => (
+            <a key={i} href={n.link} target="_blank" style={{ display: "block", marginBottom: 8 }}>
               {n.title}
             </a>
+          ))}
+        </div>
 
-            <div className="flex gap-3 text-xs mt-2">
-              <span>Score: {n.score}</span>
-              <button onClick={() => speak(n.title)}>🔊 Voice</button>
-            </div>
+        {/* VIDEO */}
+        <div style={{ background: "#111", padding: 15 }}>
+          <h2>📺 Live</h2>
+          <iframe
+            src="https://www.youtube.com/embed/hHW1oY26kxQ"
+            width="100%"
+            height="200"
+          />
+        </div>
 
-          </div>
-        ))}
+        {/* CRYPTO */}
+        <div style={{ background: "#111", padding: 15 }}>
+          <h2>💰 Crypto</h2>
+          {data.crypto?.map((c: any, i: number) => (
+            <div key={i}>{c.name}: ${c.price}</div>
+          ))}
+        </div>
+
+        {/* EVENTS */}
+        <div style={{ background: "#111", padding: 15 }}>
+          <h2>🎟️ Events</h2>
+          {events.length === 0 ? (
+            <p>No events</p>
+          ) : (
+            events.map((e, i) => <div key={i}>{e.name}</div>)
+          )}
+        </div>
+
       </div>
-
-      {/* MARKETS */}
-      <div className="col-span-3 bg-zinc-900 p-4 rounded-xl">
-        <h2>📊 Markets</h2>
-        {data.finance?.map((f: any) => (
-          <div key={f.name} className="flex justify-between">
-            <span>{f.name}</span>
-            <span>{f.price}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* VIDEO */}
-      <div className="col-span-3 bg-zinc-900 rounded-xl overflow-hidden">
-        <iframe
-          className="w-full h-full"
-          src="https://www.youtube.com/embed/hHW1oY26kxQ"
-        />
-      </div>
-
     </main>
   );
 }
