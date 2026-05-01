@@ -5,15 +5,15 @@ export async function GET() {
       subjects: [
         {
           title: "The Trinity",
-          summary: "One God in three persons: Father, Son, Holy Spirit."
+          summary: "One God in three persons: Father, Son, and Holy Spirit."
         },
         {
           title: "Council of Nicaea",
-          summary: "Defined Christ's divinity against Arianism (325 AD)."
+          summary: "Affirmed Christ’s divinity in 325 AD."
         },
         {
-          title: "Crucifixion & Resurrection",
-          summary: "Central event of Christian salvation theology."
+          title: "The Resurrection",
+          summary: "Central proof of Christ’s divine authority."
         }
       ]
     }
