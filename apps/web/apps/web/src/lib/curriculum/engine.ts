@@ -1,6 +1,17 @@
 import { topics } from "../doctrine/topics";
 
-export function getDailyTeaching() {
+type Topic = {
+  id: string;
+  title: string;
+  description: string;
+  sources: string[];
+};
+
+export function getDailyTeaching(): {
+  date: string;
+  topic: Topic;
+  lesson: string;
+} {
   const todayIndex = new Date().getDate() % topics.length;
   const topic = topics[todayIndex];
 
@@ -11,7 +22,7 @@ export function getDailyTeaching() {
   };
 }
 
-function generateLesson(topic: any) {
+function generateLesson(topic: Topic): string {
   return `
 Topic: ${topic.title}
 

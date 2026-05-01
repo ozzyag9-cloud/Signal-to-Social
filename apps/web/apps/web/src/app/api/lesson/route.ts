@@ -1,4 +1,4 @@
-import { getDailyTeaching } from "@/lib/curriculum/engine";
+import { getDailyTeaching } from "../../../lib/curriculum/engine";
 
 export async function GET() {
   const lesson = getDailyTeaching();
