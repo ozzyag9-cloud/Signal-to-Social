@@ -1,72 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
-export default function Home() {
-  const [topic, setTopic] = useState<any>(null);
-  const [summary, setSummary] = useState<string>("");
-
-  useEffect(() => {
-    fetch("/api/theology")
-      .then(res => res.json())
-      .then(d => setTopic(d.topic));
-  }, []);
-
-  async function runAI() {
-    const res = await fetch("/api/ai", {
-      method: "POST",
-      body: JSON.stringify({ text: topic.summary })
-    });
-
-    const data = await res.json();
-    setSummary(data.summary);
-  }
-
-  if (!topic) return <p style={{ padding: 20 }}>Loading theology...</p>;
-
+export default function Landing() {
   return (
-    <main style={{ padding: 20, background: "#050505", color: "white" }}>
-      <h1>✝️ Christian Intelligence</h1>
+    <main style={{
+      minHeight: "100vh",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr"
+    }}>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-        gap: 20
-      }}>
+      {/* LEFT SIDE */}
+      <div style={{ padding: 60 }}>
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ fontSize: 42 }}
+        >
+          Apologetic Intelligence (AI) Academia
+        </motion.h1>
 
-        {/* DAILY DOCTRINE */}
-        <div style={{ background: "#111", padding: 20 }}>
-          <h2>📖 Daily Doctrine</h2>
-          <h3>{topic.topic}</h3>
-          <p>{topic.summary}</p>
-          <button onClick={runAI}>🤖 Explain deeper</button>
+        <p style={{ marginTop: 20, lineHeight: 1.6 }}>
+          A Catholic & Messianic mission to structure knowledge of Christ,
+          rooted in Scripture, Tradition, and scholarship across millennia.
+        </p>
+
+        <div style={{ marginTop: 30 }}>
+          <Link href="/app">
+            <button className="button">Enter Academia</button>
+          </Link>
         </div>
 
-        {/* AI OUTPUT */}
-        <div style={{ background: "#111", padding: 20 }}>
-          <h2>🧠 AI Explanation</h2>
-          <p>{summary || "Run AI to expand this topic"}</p>
+        <div style={{ marginTop: 40 }}>
+          <p><b>Mission</b></p>
+          <p>
+            To ensure the Gospel becomes foundational in AI systems and human
+            learning — forming a safer, more truthful world.
+          </p>
         </div>
-
-        {/* SOURCES */}
-        <div style={{ background: "#111", padding: 20 }}>
-          <h2>📚 Primary Sources</h2>
-          {topic.sources.map((s: string, i: number) => (
-            <div key={i}>{s}</div>
-          ))}
-        </div>
-
-        {/* VIDEO PLACEHOLDER */}
-        <div style={{ background: "#111", padding: 20 }}>
-          <h2>📺 Teaching</h2>
-          <iframe
-            src="https://www.youtube.com/embed/8k0GJYk0x1E"
-            width="100%"
-            height="200"
-          />
-        </div>
-
       </div>
+
+      {/* RIGHT SIDE IMAGE */}
+      <div style={{
+        backgroundImage: "url('/cross.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center"
+      }} />
     </main>
   );
 }
