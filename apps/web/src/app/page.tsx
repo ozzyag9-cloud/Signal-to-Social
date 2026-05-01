@@ -1,52 +1,38 @@
 "use client";
+import { useEffect, useState } from "react";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+export default function Home(){
+  const [data,setData]=useState<any>(null);
 
-export default function Landing() {
+  useEffect(()=>{
+    fetch("/api/feed")
+      .then(res=>res.json())
+      .then(setData);
+
+    // trigger background refresh
+    fetch("/api/update");
+  },[]);
+
+  if(!data) return <p style={{color:"white"}}>Loading intelligence...</p>;
+
   return (
-    <main style={{
-      minHeight: "100vh",
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr"
-    }}>
+    <main style={{padding:20,color:"white",background:"#050505"}}>
+      <h1>📡 Signal Intelligence</h1>
 
-      {/* LEFT SIDE */}
-      <div style={{ padding: 60 }}>
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ fontSize: 42 }}
-        >
-          Apologetic Intelligence (AI) Academia
-        </motion.h1>
-
-        <p style={{ marginTop: 20, lineHeight: 1.6 }}>
-          A Catholic & Messianic mission to structure knowledge of Christ,
-          rooted in Scripture, Tradition, and scholarship across millennia.
-        </p>
-
-        <div style={{ marginTop: 30 }}>
-          <Link href="/app">
-            <button className="button">Enter Academia</button>
-          </Link>
+      <h2>📰 News</h2>
+      {data.news?.slice(0,5).map((n:any,i:number)=>(
+        <div key={i}>
+          <a href={n.link}>{n.title}</a>
         </div>
+      ))}
 
-        <div style={{ marginTop: 40 }}>
-          <p><b>Mission</b></p>
-          <p>
-            To ensure the Gospel becomes foundational in AI systems and human
-            learning — forming a safer, more truthful world.
-          </p>
-        </div>
-      </div>
-
-      {/* RIGHT SIDE IMAGE */}
-      <div style={{
-        backgroundImage: "url('/cross.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center"
-      }} />
+      <h2>📺 Live</h2>
+      {data.videos?.map((v:any)=>(
+        <iframe key={v.id}
+          src={`https://www.youtube.com/embed/${v.id}`}
+          width="100%" height="200"
+        />
+      ))}
     </main>
   );
 }

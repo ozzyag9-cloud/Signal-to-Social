@@ -10,8 +10,5 @@ export function getCache(){
 }
 
 export function setCache(data:any){
-  cache = {
-    ...data,
-    updatedAt: Date.now()
-  };
+  cache = { ...data, updatedAt: Date.now() };
 }
